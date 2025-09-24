@@ -3,9 +3,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import LoginImage from "../../assets/images/login-side-image.png";
-import Logo from "../../assets/images/logo.png";
-import loginBg from "../../assets/images/login-bg.png";
+
 
 export default function Signup() {
   const navigate = useNavigate();
