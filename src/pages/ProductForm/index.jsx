@@ -338,84 +338,96 @@ const handleAddSubCategory = async () => {
       </div>
 
       {/* Specifications */}
-      <div className="flex flex-col">
-        <label className="font-semibold text-gray-700 mb-2">Specifications</label>
-        {specifications.map((spec, idx) => (
-          <div key={idx} className="flex gap-3 mb-2 items-center">
-            <input
-              type="text"
-              value={spec.title}
-              onChange={(e) => handleSpecChange(idx, "title", e.target.value)}
-              placeholder="Title"
-              className="border border-gray-300 rounded-lg px-3 py-2 flex-1"
-            />
-            <input
-              type="text"
-              value={spec.value}
-              onChange={(e) => handleSpecChange(idx, "value", e.target.value)}
-              placeholder="Value"
-              className="border border-gray-300 rounded-lg px-3 py-2 flex-1"
-            />
-            <button type="button" onClick={() => removeSpecification(idx)} className="text-red-600">
-              <AiOutlineClose size={20} />
-            </button>
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={addSpecification}
-          className="flex items-center gap-1 text-purple-600 font-semibold mt-2"
-        >
-          <AiOutlinePlus /> Add Specification
-        </button>
-      </div>
+    <div className="flex flex-col">
+  <label className="font-semibold text-gray-700 mb-2">Specifications</label>
+  {specifications.map((spec, idx) => (
+    <div
+      key={idx}
+      className="flex flex-col md:flex-row gap-3 mb-2 items-stretch md:items-center"
+    >
+      <input
+        type="text"
+        value={spec.title}
+        onChange={(e) => handleSpecChange(idx, "title", e.target.value)}
+        placeholder="Title"
+        className="border border-gray-300 rounded-lg px-3 py-2 flex-1 w-full"
+      />
+      <input
+        type="text"
+        value={spec.value}
+        onChange={(e) => handleSpecChange(idx, "value", e.target.value)}
+        placeholder="Value"
+        className="border border-gray-300 rounded-lg px-3 py-2 flex-1 w-full"
+      />
+      <button
+        type="button"
+        onClick={() => removeSpecification(idx)}
+        className="text-red-600 flex justify-center items-center mt-2 md:mt-0"
+      >
+        <AiOutlineClose size={20} />
+      </button>
+    </div>
+  ))}
+
+  <button
+    type="button"
+    onClick={addSpecification}
+    className="flex items-center gap-1 text-purple-600 font-semibold mt-2"
+  >
+    <AiOutlinePlus /> Add Specification
+  </button>
+</div>
+
 
       {/* Category & Sub-category */}
-     {/* Category & Sub-category */}
-<div className="flex gap-4">
+
+<div className="flex flex-col md:flex-row gap-4">
   {/* Category */}
   <div className="flex-1 flex flex-col">
     <label className="font-semibold text-gray-700 mb-2">Category</label>
-    <div className="flex gap-2">
+    <div className="flex flex-col sm:flex-row gap-2">
       <select
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        className="border border-gray-300 rounded-lg px-3 py-2 flex-1"
+        className="border border-gray-300 rounded-lg px-3 py-2 flex-1 w-full"
         required
       >
         <option value="">Select Category</option>
         {categories.map((cat) => (
-          <option key={cat._id} value={cat.name}>{cat.name}</option>
+          <option key={cat._id} value={cat.name}>
+            {cat.name}
+          </option>
         ))}
       </select>
       <button
         type="button"
         onClick={() => setShowNewCategory(true)}
-        className="text-purple-600 font-semibold px-3 py-1 border border-purple-600 rounded-lg"
+        className="text-purple-600 font-semibold px-3 py-2 border border-purple-600 rounded-lg w-full sm:w-auto"
       >
         + Add
       </button>
     </div>
+
     {showNewCategory && (
-      <div className="flex gap-2 mt-2">
+      <div className="flex flex-col sm:flex-row gap-2 mt-2">
         <input
           type="text"
           placeholder="New category name"
           value={newCategoryName}
           onChange={(e) => setNewCategoryName(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-2 flex-1"
+          className="border border-gray-300 rounded-lg px-3 py-2 flex-1 w-full"
         />
         <button
           type="button"
           onClick={handleAddCategory}
-          className="bg-purple-600 text-white px-3 py-1 rounded-lg"
+          className="bg-purple-600 text-white px-3 py-2 rounded-lg w-full sm:w-auto"
         >
           Save
         </button>
         <button
           type="button"
           onClick={() => setShowNewCategory(false)}
-          className="text-red-600 px-3 py-1 rounded-lg"
+          className="text-red-600 px-3 py-2 rounded-lg w-full sm:w-auto"
         >
           Cancel
         </button>
@@ -426,46 +438,50 @@ const handleAddSubCategory = async () => {
   {/* Sub-Category */}
   <div className="flex-1 flex flex-col">
     <label className="font-semibold text-gray-700 mb-2">Sub-Category</label>
-    <div className="flex gap-2">
+    <div className="flex flex-col sm:flex-row gap-2">
       <select
         value={subCategory}
         onChange={(e) => setSubCategory(e.target.value)}
-        className="border border-gray-300 rounded-lg px-3 py-2 flex-1"
+        className="border border-gray-300 rounded-lg px-3 py-2 flex-1 w-full"
         required
       >
         <option value="">Select Sub-Category</option>
-        {category && subCategories[category]?.map((sub) => (
-          <option key={sub} value={sub}>{sub}</option>
-        ))}
+        {category &&
+          subCategories[category]?.map((sub) => (
+            <option key={sub} value={sub}>
+              {sub}
+            </option>
+          ))}
       </select>
       <button
         type="button"
         onClick={() => setShowNewSubCategory(true)}
-        className="text-purple-600 font-semibold px-3 py-1 border border-purple-600 rounded-lg"
+        className="text-purple-600 font-semibold px-3 py-2 border border-purple-600 rounded-lg w-full sm:w-auto"
       >
         + Add
       </button>
     </div>
+
     {showNewSubCategory && (
-      <div className="flex gap-2 mt-2">
+      <div className="flex flex-col sm:flex-row gap-2 mt-2">
         <input
           type="text"
           placeholder="New sub-category name"
           value={newSubCategoryName}
           onChange={(e) => setNewSubCategoryName(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-2 flex-1"
+          className="border border-gray-300 rounded-lg px-3 py-2 flex-1 w-full"
         />
         <button
           type="button"
           onClick={handleAddSubCategory}
-          className="bg-purple-600 text-white px-3 py-1 rounded-lg"
+          className="bg-purple-600 text-white px-3 py-2 rounded-lg w-full sm:w-auto"
         >
           Save
         </button>
         <button
           type="button"
           onClick={() => setShowNewSubCategory(false)}
-          className="text-red-600 px-3 py-1 rounded-lg"
+          className="text-red-600 px-3 py-2 rounded-lg w-full sm:w-auto"
         >
           Cancel
         </button>
@@ -473,6 +489,7 @@ const handleAddSubCategory = async () => {
     )}
   </div>
 </div>
+
 
 
       {/* Submit */}
