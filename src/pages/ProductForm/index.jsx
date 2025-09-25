@@ -108,7 +108,7 @@ const handleAddSubCategory = async () => {
         setImages(
           initialData.fileUrl.map((url) => ({
             file: null,
-            preview: url, // already hosted
+            preview: url, 
           }))
         );
       }
