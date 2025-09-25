@@ -1,5 +1,5 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    { "source": "/(.*)", "destination": "https://kishan-kendra-apis.onrender.com/api/:path*"}
   ]
 }

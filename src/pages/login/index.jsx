@@ -55,7 +55,7 @@ export default function Login() {
       <div className="max-w-xl bg-white p-8 rounded-2xl shadow-lg w-full">
         <div className="text-4xl font-bold text-gray-800 text-center mb-6">Dashboard</div>
         <h2 className="text-center text-2xl font-semibold text-gray-700 mb-2">
-          Welcome Back
+          Welcome Backk
         </h2>
         <p className="text-center text-sm text-gray-600 mb-6">
           Enter your contact and password to access your account
