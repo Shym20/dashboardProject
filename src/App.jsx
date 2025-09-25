@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/protectedRoute";
 import RootRedirect from "./pages/Root";
 import CreatorResetPassword from "./pages/Reset-Password";
 import AddProduct from "./pages/AddProduct";
+import './App.css'
 
 function App() {
   return (
