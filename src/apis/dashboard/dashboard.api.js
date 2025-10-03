@@ -109,27 +109,28 @@ updateProduct = async (productId, formData) => {
     });
   };
 
-  addCategory = async (formData) => {
+ addCategory = async (body) => {
   return this.instance({
-    method: "POST", // should be POST, not DELETE
+    method: "POST",
     url: this.addCategoryConfig.Endpoint,
-    data: formData,
+    data: body,
     headers: {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",  // correct for your curl
     },
   });
 };
 
-addSubCategory = async (formData) => {
+addSubCategory = async (body) => {
   return this.instance({
-    method: "POST", // should be POST, not DELETE
+    method: "POST",
     url: this.addSubCategoryConfig.Endpoint,
-    data: formData,
+    data: body,
     headers: {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
     },
   });
 };
+
 
 
 

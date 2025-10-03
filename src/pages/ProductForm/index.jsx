@@ -3,13 +3,6 @@ import { motion } from "framer-motion";
 import { AiOutlinePlus, AiOutlineClose } from "react-icons/ai";
 import DashboardApi from "../../apis/dashboard/dashboard.api";
 
-const categories = ["Electronics", "Fashion", "Books", "Furniture"];
-const subCategories = {
-  Electronics: ["Mobiles", "Laptops", "Headphones"],
-  Fashion: ["Clothes", "Shoes", "Accessories"],
-  Books: ["Fiction", "Non-Fiction", "Comics"],
-  Furniture: ["Tables", "Chairs", "Beds"],
-};
 
 export default function ProductForm({ mode = "add", initialData = {}, onSuccess }) {
   const [title, setTitle] = useState("");
@@ -30,33 +23,37 @@ const [newSubCategoryName, setNewSubCategoryName] = useState("");
   const [subCategory, setSubCategory] = useState("");
 
   useEffect(() => {
-   const fetchCategories = async () => {
-  try {
-    const dashboardApi = new DashboardApi();
-    const catRes = await dashboardApi.getCategories();
-    const subRes = await dashboardApi.getSubCategories();
+  const fetchCategories = async () => {
+    try {
+      const dashboardApi = new DashboardApi();
+      const catRes = await dashboardApi.getCategories();
+      const subRes = await dashboardApi.getSubCategories();
 
-    const cats = Array.isArray(catRes.data) ? catRes.data : [];
-    const subs = Array.isArray(subRes.data) ? subRes.data : [];
+      const cats = Array.isArray(catRes.data) ? catRes.data : [];
+      const subs = Array.isArray(subRes.data) ? subRes.data : [];
+      console.log("My SubCat are : ", subs);
 
-    setCategories(cats);
+      setCategories(cats);
 
-    const subMap = {};
-    subs.forEach((s) => {
-      if (!subMap[s.category]) subMap[s.category] = [];
-      subMap[s.category].push(s.name);
-    });
-    setSubCategories(subMap);
-  } catch (err) {
-    console.error("Failed to fetch categories/subcategories", err);
-    setCategories([]);
-    setSubCategories({});
-  }
-};
+      // Build map of category → subcategories
+      const subMap = {};
+      subs.forEach((s) => {
+        const catName = s.category || "all"; // depends on your backend field
+        if (!subMap[catName]) subMap[catName] = [];
+        subMap[catName].push(s.name);
+      });
 
+      setSubCategories(subMap);
+    } catch (err) {
+      console.error("Failed to fetch categories/subcategories", err);
+      setCategories([]);
+      setSubCategories({});
+    }
+  };
 
-    fetchCategories();
-  }, []);
+  fetchCategories();
+}, []);
+
 
 
   const handleAddCategory = async () => {
@@ -445,13 +442,11 @@ const handleAddSubCategory = async () => {
         className="border border-gray-300 rounded-lg px-3 py-2 flex-1 w-full"
         required
       >
-        <option value="">Select Sub-Category</option>
-        {category &&
-          subCategories[category]?.map((sub) => (
-            <option key={sub} value={sub}>
-              {sub}
-            </option>
-          ))}
+       <option value="">Select Sub-Category</option>
+{(subCategories[category] || subCategories.all || []).map((sub) => (
+  <option key={sub} value={sub}>{sub}</option>
+))}
+
       </select>
       <button
         type="button"
