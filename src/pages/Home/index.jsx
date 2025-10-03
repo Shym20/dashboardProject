@@ -13,6 +13,39 @@ const Home = () => {
   const [productToDelete, setProductToDelete] = useState(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState(null);
+  const [categories, setCategories] = useState([]);
+const [subCategories, setSubCategories] = useState({});
+const [selectedCategory, setSelectedCategory] = useState("");
+const [selectedSubCategory, setSelectedSubCategory] = useState("");
+
+useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const catRes = await dashboardApi.getCategories();
+      const subRes = await dashboardApi.getSubCategories();
+
+      const cats = Array.isArray(catRes.data) ? catRes.data : [];
+      const subs = Array.isArray(subRes.data) ? subRes.data : [];
+
+      setCategories(cats);
+
+      // Build map of category → subcategories
+      const subMap = {};
+      subs.forEach((s) => {
+        const catName = s.category || "all";
+        if (!subMap[catName]) subMap[catName] = [];
+        subMap[catName].push(s.name);
+      });
+      setSubCategories(subMap);
+    } catch (err) {
+      console.error("Failed to fetch categories/subcategories", err);
+    }
+  };
+
+  fetchCategories();
+}, []);
+
+
   const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
@@ -21,25 +54,32 @@ const Home = () => {
   const dashboardApi = new DashboardApi();
 
   // Fetch products
-  const fetchProducts = async (pageNo = 1) => {
-    try {
-      setLoading(true);
-      const response = await dashboardApi.instance.get(`/api/product/get-all-products?page=${pageNo}&limit=10`);
-      const productsData = response?.data?.products || [];
-      const paginationData = response?.data?.pagination || { totalPages: 1 };
+ const fetchProducts = async (pageNo = 1, category = selectedCategory, subcategory = selectedSubCategory) => {
+  try {
+    setLoading(true);
+    const response = await dashboardApi.getProducts(pageNo, 10, category, subcategory);
 
-      setProducts(productsData);
-      setPagination(paginationData);
-    } catch (err) {
-      console.error("Failed to fetch products:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const productsData = response?.data?.products || [];
+    const paginationData = response?.data?.pagination || { totalPages: 1 };
+
+    setProducts(productsData);
+    setPagination(paginationData);
+  } catch (err) {
+    console.error("Failed to fetch products:", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   useEffect(() => {
     fetchProducts(page);
   }, [page]);
+
+  useEffect(() => {
+  fetchProducts(1, selectedCategory, selectedSubCategory);
+  setPage(1); // reset to first page on filter change
+}, [selectedCategory, selectedSubCategory]);
 
   // Open modal
   const handleDeleteClick = (product) => {
@@ -76,6 +116,44 @@ const Home = () => {
     <main className="flex-1 overflow-y-hidden overflow-x-hidden scrollbar-none p-4 bg-gray-50">
       <div className="p-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">Products</h1>
+
+        {/* Filters */}
+<div className="flex flex-col md:flex-row gap-4 mb-6">
+  {/* Category Filter */}
+  <select
+    value={selectedCategory}
+    onChange={(e) => {
+      setSelectedCategory(e.target.value);
+      setSelectedSubCategory(""); // reset sub-category
+    }}
+    className="border border-gray-300 rounded-lg px-3 py-2"
+  >
+    <option value="">All Categories</option>
+    {categories.map((cat) => (
+      <option key={cat._id} value={cat.name}>
+        {cat.name}
+      </option>
+    ))}
+  </select>
+
+  {/* Sub-Category Filter */}
+  <select
+    value={selectedSubCategory}
+    onChange={(e) => setSelectedSubCategory(e.target.value)}
+    className="border border-gray-300 rounded-lg px-3 py-2"
+    disabled={!selectedCategory}
+  >
+    <option value="">All Sub-Categories</option>
+    {(subCategories[selectedCategory] || []).map((sub, idx) => (
+      <option key={idx} value={sub}>
+        {sub}
+      </option>
+    ))}
+  </select>
+</div>
+
+
+
 
         {products.length === 0 ? (
           <p className="text-gray-500">No products found.</p>

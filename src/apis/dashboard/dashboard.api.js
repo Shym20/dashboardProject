@@ -58,13 +58,18 @@ class DashboardApi extends HttpClient {
       data: reqBody,
     });
   };
- getProducts = async (page = 1, limit = 10) => {
+ getProducts = async (page = 1, limit = 10, category = "", subcategory = "") => {
+  let url = `${this.getProductsConfig.Endpoint}?page=${page}&limit=${limit}`;
+  if (category) url += `&category=${encodeURIComponent(category)}`;
+  if (subcategory) url += `&subcategory=${encodeURIComponent(subcategory)}`;
+
   return this.instance({
     method: this.getProductsConfig.Method,
-    url: `${this.getProductsConfig.Endpoint}?page=${page}&limit=${limit}`,
+    url,
     headers: {},
   });
 };
+
 
 deleteProduct = async (productId) => {
   return this.instance({

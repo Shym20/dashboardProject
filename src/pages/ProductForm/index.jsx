@@ -152,14 +152,14 @@ const handleAddSubCategory = async () => {
       alert("Please fill all required fields");
       return;
     }
-    if (specifications.some((s) => !s.title || !s.value)) {
-      alert("Please fill all specification fields");
-      return;
-    }
-    if (!pdfFile && mode === "add") {
-      alert("Please upload a PDF file");
-      return;
-    }
+    // if (specifications.some((s) => !s.title || !s.value)) {
+    //   alert("Please fill all specification fields");
+    //   return;
+    // }
+    // if (!pdfFile && mode === "add") {
+    //   alert("Please upload a PDF file");
+    //   return;
+    // }
     if (images.length === 0 && mode === "add") {
       alert("Please select at least one product image");
       return;
